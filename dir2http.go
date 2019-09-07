@@ -22,6 +22,8 @@ import (
 func main() {
 	port := flag.String("port", ":8080", "Serve port")
 	folder := flag.String("dir", ".", "Serve Dir")
+	flag.Parse()
+
 	fmt.Printf("dir2http dir=%v port=%v , http://localhost%v/ \n",
 		*folder, *port, *port)
 
