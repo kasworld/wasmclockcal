@@ -1,15 +1,17 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <script src="wasm_exec.js"></script>
-    <script>
-        const go = new Go();
-        WebAssembly.instantiateStreaming(fetch("wasmclockcal.wasm"), go.importObject).then((result) => {
-            go.run(result.instance);
-        });
-    </script>
-
+<meta charset="utf-8">
+<title>Clock calendar</title>
+<script src="wasm_exec.js"></script>
+<script>
+function initPage() {
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("wasmclockcal.wasm"), go.importObject).then((result) => {
+        go.run(result.instance);
+    });
+}
+</script>
 <style>
     #clock {
         color: white;
@@ -49,7 +51,7 @@
 </style>
 </head>
 
-<body id="body" style="margin:0; padding:0; background-color: black;" >
+<body id="body" style="margin:0; padding:0; background-color: black;" onload="initPage()">
     <div id="clock"> 00:00:00 </div>
     <div id="date"> 0000-00-00 </div>
     <div id="calendar"> calendar </div>
