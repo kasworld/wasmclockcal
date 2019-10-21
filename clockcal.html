@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Clock calendar</title>
+<script src="wasm_exec.js"></script>
+<script>
+function initPage() {
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("wasmclockcal.wasm"), go.importObject).then((result) => {
+        go.run(result.instance);
+    });
+}
+</script>
+<style>
+    #clock {
+        color: white;
+        text-align: center;
+        font-size: 200px;
+        line-height: 100%;
+    }
+
+    #date {
+        color: white;
+        text-align: center;
+        font-size: 50px;
+        line-height: 100%;
+    }
+
+    #calendar {
+        color: white;
+        text-align: right;
+        font-size: 50px;
+        line-height: 100%;
+        /* margin: auto;
+    width : 80%; */
+    }
+
+    table#t01 {
+        margin-left: auto;
+        margin-right: auto;
+
+        /* width: 100%;  */
+        /* background-color: #f1f1c1; */
+    }
+
+    table#t01 th {
+        /* color: white; */
+        /* background-color: black; */
+    }
+</style>
+</head>
+
+<body id="body" style="margin:0; padding:0; background-color: black;" onload="initPage()">
+    <div id="clock"> 00:00:00 </div>
+    <div id="date"> 0000-00-00 </div>
+    <div id="calendar"> calendar </div>
+</body>
+
+</html>

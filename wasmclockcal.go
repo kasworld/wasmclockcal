@@ -33,7 +33,7 @@ func jsFrame(js.Value, []js.Value) interface{} {
 }
 
 func displayFrame() {
-	js.Global().Call("requestAnimationFrame", js.FuncOf(jsFrame))
+	defer js.Global().Call("requestAnimationFrame", js.FuncOf(jsFrame))
 	thistime := time.Now()
 	if lasttime.Second() == thistime.Second() {
 		return
