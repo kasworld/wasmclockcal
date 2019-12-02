@@ -92,11 +92,11 @@ func updateCalendar(fontSize int) {
 	fmt.Fprintf(&buf, "<colgroup>")
 	for weekday := time.Sunday; weekday <= time.Saturday; weekday++ {
 		if weekday == 0 {
-			fmt.Fprintf(&buf, "<col style=\"background-color:darkred; width:14%%; \">")
+			fmt.Fprintf(&buf, "<col style=\"width:14%%; \">")
 		} else if weekday == 6 {
-			fmt.Fprintf(&buf, "<col style=\"background-color:darkblue; width:14%%; \">")
+			fmt.Fprintf(&buf, "<col style=\"width:14%%; \">")
 		} else {
-			fmt.Fprintf(&buf, "<col style=\"background-color:gray; width:14%%; \">")
+			fmt.Fprintf(&buf, "<col style=\"width:14%%; \">")
 		}
 	}
 	fmt.Fprintf(&buf, "<colgroup>")
@@ -111,9 +111,15 @@ func updateCalendar(fontSize int) {
 				fmt.Fprintf(&buf, "<td style=\"color:darkgray;\">%d</td>", now.Day())
 			} else {
 				if now.Day() != today.Day() {
-					fmt.Fprintf(&buf, "<td style=\"color:white;\">%d</td>", now.Day())
+					if weekday == 0 {
+						fmt.Fprintf(&buf, "<td style=\"color:red;\">%d</td>", now.Day())
+					} else if weekday == 6 {
+						fmt.Fprintf(&buf, "<td style=\"color:SkyBlue;\">%d</td>", now.Day())
+					} else {
+						fmt.Fprintf(&buf, "<td style=\"color:white;\">%d</td>", now.Day())
+					}
 				} else {
-					fmt.Fprintf(&buf, "<td style=\"color:orangered;\">%d</td>", now.Day())
+					fmt.Fprintf(&buf, "<td style=\"color:orange;\">%d</td>", now.Day())
 				}
 			}
 			now = now.AddDate(0, 0, 1)

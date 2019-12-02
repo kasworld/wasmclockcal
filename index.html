@@ -49,10 +49,20 @@ function initPage() {
         /* color: white; */
         /* background-color: black; */
     }
+
+    body {
+        margin:0; 
+        padding:0; 
+        background-color: black; 
+        background-image:url(bg.jpg); 
+        background-repeat: no-repeat; 
+        background-size: cover; 
+        background-position: center;
+   }
 </style>
 </head>
 
-<body id="body" style="margin:0; padding:0; background-color: black;" onload="initPage()">
+<body id="body" onload="initPage()">
     <div id="clock"> 00:00:00 </div>
     <div id="date"> 0000-00-00 </div>
     <div id="calendar"> calendar </div>
