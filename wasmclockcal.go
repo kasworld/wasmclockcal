@@ -14,15 +14,33 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"syscall/js"
 	"time"
+
+	"github.com/kasworld/goguelike2/lib/jslog"
 )
 
 var done chan struct{}
 
 func main() {
+	queryv := GetQuery()
+	if mvid := queryv.Get("mvid"); mvid != "" {
+		setYoutube(mvid)
+	} else if imgname := queryv.Get("bgimg"); imgname != "" {
+		setBGImage(imgname)
+	}
 	displayFrame()
 	<-done
+}
+
+func GetQuery() url.Values {
+	loc := js.Global().Get("window").Get("location").Get("href")
+	u, err := url.Parse(loc.String())
+	if err != nil {
+		jslog.Errorf("%v", err)
+	}
+	return u.Query()
 }
 
 var lasttime time.Time
@@ -61,6 +79,26 @@ func displayFrame() {
 		calendarFontSize = winH / 12
 	}
 	updateCalendar(calendarFontSize)
+}
+
+func setBGImage(imageurl string) {
+	str := fmt.Sprintf(`
+	<img src="%[1]s" style="width:100%%; height:100%%;">
+	`, imageurl)
+
+	jsObj := js.Global().Get("document").Call("getElementById", "bg")
+	jsObj.Set("innerHTML", str)
+}
+
+func setYoutube(mvid string) {
+	str := fmt.Sprintf(`
+	<iframe frameborder="0" height="100%%" width="100%%" allow="autoplay"
+	src="https://youtube.com/embed/%[1]s?autoplay=1&controls=0&fs=0&loop=1">
+	  </iframe>
+	`, mvid)
+
+	jsObj := js.Global().Get("document").Call("getElementById", "bg")
+	jsObj.Set("innerHTML", str)
 }
 
 func updateClock(fontSize int) {

@@ -26,9 +26,9 @@ func main() {
 
 	fmt.Printf("dir2http dir=%v port=%v http://localhost%v/\n\n",
 		*folder, *port, *port)
-	fmt.Printf("open bgclock http://localhost%v/index.html\n",
+	fmt.Printf("open bgclock http://localhost%v/?bgimg=image\n",
 		*port)
-	fmt.Printf("open youtubu clock http://localhost%v/youtube.html\n",
+	fmt.Printf("open youtube clock http://localhost%v/?mvid=youtubeid\n",
 		*port)
 
 	webMux := http.NewServeMux()

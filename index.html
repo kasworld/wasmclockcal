@@ -50,15 +50,14 @@ function initPage() {
         margin:0; 
         padding:0; 
         background-color: black; 
-        background-image:url(bg.jpg); 
-        background-repeat: no-repeat; 
-        background-size: cover; 
-        background-position: center;
    }
 </style>
 </head>
 
 <body id="body" onload="initPage()">
+    <div id="bg" style="position: fixed; z-index: -99; width: 100%; height: 100%">
+    </div>
+ 
     <div id="clock"> 00:00:00 </div>
     <div id="date"> 0000-00-00 </div>
     <div id="calendar"> calendar </div>
