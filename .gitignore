@@ -12,4 +12,5 @@
 *.out
 *.wasm
 
-bg.jpg
+*.jpg
+dir2http

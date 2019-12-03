@@ -24,8 +24,12 @@ func main() {
 	folder := flag.String("dir", ".", "Serve Dir")
 	flag.Parse()
 
-	fmt.Printf("dir2http dir=%v port=%v , http://localhost%v/ \n",
+	fmt.Printf("dir2http dir=%v port=%v http://localhost%v/\n\n",
 		*folder, *port, *port)
+	fmt.Printf("open bgclock http://localhost%v/index.html\n",
+		*port)
+	fmt.Printf("open youtubu clock http://localhost%v/youtube.html\n",
+		*port)
 
 	webMux := http.NewServeMux()
 	webMux.Handle("/",
