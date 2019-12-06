@@ -62,22 +62,18 @@ func displayFrame() {
 	winW := win.Get("innerWidth").Int()
 	winH := win.Get("innerHeight").Int()
 
-	clockFontSize := winW / 5
-	if winH/2 < clockFontSize {
-		clockFontSize = winH / 3
+	sizeRef := winW
+	if sizeRef > winH {
+		sizeRef = winH
 	}
+
+	clockFontSize := sizeRef / 6
 	updateClock(clockFontSize)
 
-	dateFontSize := winW / 10
-	if winH < dateFontSize*10 {
-		dateFontSize = winH / 10
-	}
+	dateFontSize := sizeRef / 20
 	updateDate(dateFontSize)
 
-	calendarFontSize := winW / 16
-	if winH < calendarFontSize*12 {
-		calendarFontSize = winH / 12
-	}
+	calendarFontSize := sizeRef / 20
 	updateCalendar(calendarFontSize)
 }
 
@@ -124,7 +120,7 @@ func updateCalendar(fontSize int) {
 	fmt.Fprintf(&buf, "<table id=\"t01\">")
 
 	for weekday := time.Sunday; weekday <= time.Saturday; weekday++ {
-		fmt.Fprintf(&buf, "<td>%v</td>", weekday.String()[:3])
+		fmt.Fprintf(&buf, "<td>%v</td>", weekday.String()[:2])
 	}
 
 	fmt.Fprintf(&buf, "<colgroup>")
@@ -142,7 +138,7 @@ func updateCalendar(fontSize int) {
 	today := time.Now()
 	now := time.Now()
 	now = now.AddDate(0, 0, -int(now.Weekday())-7)
-	for week := 0; week < 5; week++ {
+	for week := 0; week < 6; week++ {
 		fmt.Fprintf(&buf, "<tr>")
 		for weekday := time.Sunday; weekday <= time.Saturday; weekday++ {
 			if now.Month() != today.Month() {
