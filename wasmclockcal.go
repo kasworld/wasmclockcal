@@ -23,12 +23,16 @@ import (
 
 var done chan struct{}
 
+var bgExist bool
+
 func main() {
 	queryv := GetQuery()
 	if mvid := queryv.Get("mvid"); mvid != "" {
 		setYoutube(mvid)
+		bgExist = true
 	} else if imgname := queryv.Get("bgimg"); imgname != "" {
 		setBGImage(imgname)
+		bgExist = true
 	}
 	displayFrame()
 	<-done
@@ -59,21 +63,30 @@ func displayFrame() {
 	lasttime = thistime
 
 	win := js.Global().Get("window")
-	winW := win.Get("innerWidth").Int()
-	winH := win.Get("innerHeight").Int()
+	winW := win.Get("innerWidth").Float()
+	winH := win.Get("innerHeight").Float()
 
 	sizeRef := winW
 	if sizeRef > winH {
 		sizeRef = winH
 	}
 
-	clockFontSize := sizeRef / 6
+	clockFontSize := sizeRef / 4
+	if bgExist {
+		clockFontSize = sizeRef / 6
+	}
 	updateClock(clockFontSize)
 
-	dateFontSize := sizeRef / 20
+	dateFontSize := sizeRef / 12
+	if bgExist {
+		dateFontSize = sizeRef / 20
+	}
 	updateDate(dateFontSize)
 
-	calendarFontSize := sizeRef / 20
+	calendarFontSize := sizeRef / 12
+	if bgExist {
+		calendarFontSize = sizeRef / 20
+	}
 	updateCalendar(calendarFontSize)
 }
 
@@ -97,25 +110,25 @@ func setYoutube(mvid string) {
 	jsObj.Set("innerHTML", str)
 }
 
-func updateClock(fontSize int) {
+func updateClock(fontSize float64) {
 	jsObj := js.Global().Get("document").Call("getElementById", "clock")
-	jsObj.Get("style").Set("font-size", fmt.Sprintf("%dpx", fontSize))
+	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, time.Now().Format("15:04:05"))
 	jsObj.Set("innerHTML", buf.String())
 }
 
-func updateDate(fontSize int) {
+func updateDate(fontSize float64) {
 	jsObj := js.Global().Get("document").Call("getElementById", "date")
-	jsObj.Get("style").Set("font-size", fmt.Sprintf("%dpx", fontSize))
+	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, time.Now().Format("2006-01-02 Mon"))
 	jsObj.Set("innerHTML", buf.String())
 }
 
-func updateCalendar(fontSize int) {
+func updateCalendar(fontSize float64) {
 	jsObj := js.Global().Get("document").Call("getElementById", "calendar")
-	jsObj.Get("style").Set("font-size", fmt.Sprintf("%dpx", fontSize))
+	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, "<table id=\"t01\">")
 
