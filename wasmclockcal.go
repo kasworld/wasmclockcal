@@ -18,7 +18,7 @@ import (
 	"syscall/js"
 	"time"
 
-	"github.com/kasworld/goguelike2/lib/jslog"
+	"github.com/kasworld/jslog"
 )
 
 var done chan struct{}
