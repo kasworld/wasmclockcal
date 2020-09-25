@@ -71,16 +71,16 @@ func displayFrame() {
 		sizeRef = winH
 	}
 
-	clockFontSize := sizeRef / 4
+	clockFontSize := winW / 4
+	if clockFontSize > winH/2.7 {
+		clockFontSize = winH / 2.7
+	}
 	if bgExist {
-		clockFontSize = sizeRef / 6
+		clockFontSize /= 1.5
 	}
 	updateClock(clockFontSize)
 
-	dateFontSize := sizeRef / 12
-	if bgExist {
-		dateFontSize = sizeRef / 20
-	}
+	dateFontSize := clockFontSize / 3
 	updateDate(dateFontSize)
 
 	calendarFontSize := sizeRef / 12
