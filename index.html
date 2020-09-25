@@ -17,6 +17,8 @@ function initPage() {
     const go = new Go();
     WebAssembly.instantiateStreaming(fetch("wasmclockcal.wasm"), go.importObject).then((result) => {
         go.run(result.instance);
+    }).catch((err) => {
+        console.error(err);
     });
 }
 </script>
