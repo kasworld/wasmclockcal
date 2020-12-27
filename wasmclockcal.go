@@ -15,18 +15,35 @@ import (
 	"bytes"
 	"fmt"
 	"net/url"
+	"strconv"
+	"strings"
 	"syscall/js"
 	"time"
 
 	"github.com/kasworld/jslog"
 )
 
+var refresh int = 3600
+
+var starttime time.Time
+
 var done chan struct{}
 
 var bgExist bool
 
+var lasttime time.Time
+
 func main() {
+	starttime = time.Now()
 	queryv := GetQuery()
+
+	if refreshQry := strings.TrimSpace(queryv.Get("refresh")); refreshQry != "" {
+		value, err := strconv.ParseInt(refreshQry, 0, 64)
+		if err == nil {
+			refresh = int(value)
+		}
+	}
+
 	if mvid := queryv.Get("mvid"); mvid != "" {
 		setYoutube(mvid)
 		bgExist = true
@@ -47,8 +64,6 @@ func GetQuery() url.Values {
 	return u.Query()
 }
 
-var lasttime time.Time
-
 func jsFrame(js.Value, []js.Value) interface{} {
 	displayFrame()
 	return nil
@@ -57,6 +72,11 @@ func jsFrame(js.Value, []js.Value) interface{} {
 func displayFrame() {
 	defer js.Global().Call("requestAnimationFrame", js.FuncOf(jsFrame))
 	thistime := time.Now()
+
+	if thistime.Sub(starttime) > time.Duration(refresh)*time.Second {
+		js.Global().Get("location").Call("reload")
+	}
+
 	if lasttime.Second() == thistime.Second() {
 		return
 	}

@@ -5,7 +5,7 @@
 
 go언어의 webassembly 생성 기능을 사용해서 만든 시계/달력 입니다.
 
-build.sh을 실행하면
+build.sh(windows에선 build.ps1) 을 실행하면
 
 파일을 http로 서비스 해줄 dir2http 와
 실제 index.html을 통해 로딩되어 시계/달력을 표시해줄 wasmclock.wasm
@@ -22,6 +22,8 @@ dir2http를 실행하면 접속할 클라이언트 url을 보여 줍니다.
     open youtube clock http://localhost:8080/?mvid=youtubeid
 
 클라이언트 접속 URL 에
+
+refresh=페이지리로드간격초 를 주면 주어진 초 마다 페이지를 리로드 합니다. 
 
 bgimg=이미지이름(url) 을 주면 배경그림이 설정되고
 

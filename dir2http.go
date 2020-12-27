@@ -26,6 +26,8 @@ func main() {
 
 	fmt.Printf("dir2http dir=%v port=%v http://localhost%v/\n\n",
 		*folder, *port, *port)
+	fmt.Printf("set refresh page second default(3600)\nhttp://localhost%v/?refresh=reloadsecond\n\n",
+		*port)
 	fmt.Printf("open bgclock http://localhost%v/?bgimg=image\n",
 		*port)
 	fmt.Printf("open youtube clock http://localhost%v/?mvid=youtubeid\n",
