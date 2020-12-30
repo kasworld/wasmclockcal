@@ -98,9 +98,9 @@ func displayFrame() {
 	if bgExist {
 		clockFontSize /= 1.5
 	}
-	updateClock(clockFontSize)
+	updateTime(clockFontSize)
 
-	dateFontSize := clockFontSize / 3
+	dateFontSize := clockFontSize / 3.5
 	updateDate(dateFontSize)
 
 	calendarFontSize := sizeRef / 12
@@ -108,6 +108,8 @@ func displayFrame() {
 		calendarFontSize = sizeRef / 20
 	}
 	updateCalendar(calendarFontSize)
+
+	updateDebugInfo(calendarFontSize / 2)
 }
 
 func setBGImage(imageurl string) {
@@ -130,11 +132,19 @@ func setYoutube(mvid string) {
 	jsObj.Set("innerHTML", str)
 }
 
-func updateClock(fontSize float64) {
-	jsObj := js.Global().Get("document").Call("getElementById", "clock")
+func updateTime(fontSize float64) {
+	jsObj := js.Global().Get("document").Call("getElementById", "time")
 	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
-	fmt.Fprintf(&buf, time.Now().Format("15:04:05"))
+	fmt.Fprintf(&buf, "%v", time.Now().Format("15:04:05"))
+	jsObj.Set("innerHTML", buf.String())
+}
+
+func updateDebugInfo(fontSize float64) {
+	jsObj := js.Global().Get("document").Call("getElementById", "debuginfo")
+	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
+	var buf bytes.Buffer
+	fmt.Fprintf(&buf, "%.2f", time.Now().Sub(starttime).Seconds())
 	jsObj.Set("innerHTML", buf.String())
 }
 
@@ -142,7 +152,7 @@ func updateDate(fontSize float64) {
 	jsObj := js.Global().Get("document").Call("getElementById", "date")
 	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
-	fmt.Fprintf(&buf, time.Now().Format("2006-01-02 Mon"))
+	fmt.Fprintf(&buf, "%v", time.Now().Format("2006-01-02 Mon"))
 	jsObj.Set("innerHTML", buf.String())
 }
 
