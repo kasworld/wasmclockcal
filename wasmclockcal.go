@@ -73,7 +73,7 @@ func displayFrame() {
 	defer js.Global().Call("requestAnimationFrame", js.FuncOf(jsFrame))
 	thistime := time.Now()
 
-	if thistime.Sub(starttime) > time.Duration(refresh)*time.Second {
+	if refresh > 0 && thistime.Sub(starttime) > time.Duration(refresh)*time.Second {
 		js.Global().Get("location").Call("reload")
 	}
 
