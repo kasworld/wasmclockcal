@@ -44,13 +44,14 @@ func main() {
 		}
 	}
 
-	if mvid := queryv.Get("mvid"); mvid != "" {
+	if mvid := strings.TrimSpace(queryv.Get("mvid")); mvid != "" {
 		setYoutube(mvid)
 		bgExist = true
-	} else if imgname := queryv.Get("bgimg"); imgname != "" {
+	} else if imgname := strings.TrimSpace(queryv.Get("bgimg")); imgname != "" {
 		setBGImage(imgname)
 		bgExist = true
 	}
+
 	displayFrame()
 	<-done
 }
