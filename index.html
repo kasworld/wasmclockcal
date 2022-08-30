@@ -76,16 +76,28 @@
             line-height: 100%;
         }
 
+        #bottomleft {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            opacity: 0.9;
+            color: white;
+            text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+            text-align: center;
+            font-size: 50px;
+            line-height: 100%;
+        }
+
+        #debuginfo {
+            opacity: 0.9;
+            color: black;
+        }
+
         table#t01 {
             border: 0px;
             border-collapse: collapse;
         }
 
-        #debuginfo {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
 
         body {
             margin: 0;
@@ -95,15 +107,18 @@
     </style>
 </head>
 
-<body id="body" onload="initPage()">
+<body id="body" onload="initPage()" onclick="toggleFullScreen()">
     <div id="bg" style="position: fixed; z-index: -99; width: 100%; height: 100%">
     </div>
-    <div id="datetime" onclick="toggleFullScreen()">
+    <div id="datetime">
         <div id="time">00:00:00</div>
         <div id="date">0000-00-00</div>
     </div>
     <div id="calendar">calendar</div>
-    <div id="debuginfo"></div>
+    <div id="bottomleft">
+        <div id="weather">weather</div>
+        <div id="debuginfo">debuginfo</div>
+    </div>
 </body>
 
 </html>

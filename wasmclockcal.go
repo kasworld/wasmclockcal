@@ -110,6 +110,8 @@ func displayFrame() {
 	}
 	updateCalendar(calendarFontSize)
 
+	updateWeather(calendarFontSize / 2)
+
 	updateDebugInfo(calendarFontSize / 2)
 }
 
@@ -133,19 +135,27 @@ func setYoutube(mvid string) {
 	jsObj.Set("innerHTML", str)
 }
 
-func updateTime(fontSize float64) {
-	jsObj := js.Global().Get("document").Call("getElementById", "time")
-	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
-	var buf bytes.Buffer
-	fmt.Fprintf(&buf, "%v", time.Now().Format("15:04:05"))
-	jsObj.Set("innerHTML", buf.String())
-}
-
 func updateDebugInfo(fontSize float64) {
 	jsObj := js.Global().Get("document").Call("getElementById", "debuginfo")
 	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, "%.2f", time.Now().Sub(starttime).Seconds())
+	jsObj.Set("innerHTML", buf.String())
+}
+
+func updateWeather(fontSize float64) {
+	jsObj := js.Global().Get("document").Call("getElementById", "weather")
+	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
+	var buf bytes.Buffer
+	fmt.Fprintf(&buf, "%s", "")
+	jsObj.Set("innerHTML", buf.String())
+}
+
+func updateTime(fontSize float64) {
+	jsObj := js.Global().Get("document").Call("getElementById", "time")
+	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
+	var buf bytes.Buffer
+	fmt.Fprintf(&buf, "%v", time.Now().Format("15:04:05"))
 	jsObj.Set("innerHTML", buf.String())
 }
 
