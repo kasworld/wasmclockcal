@@ -147,7 +147,7 @@ func updateWeather(fontSize float64) {
 	jsObj := js.Global().Get("document").Call("getElementById", "weather")
 	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
-	fmt.Fprintf(&buf, "%s", "")
+	fmt.Fprintf(&buf, "%s", " ")
 	jsObj.Set("innerHTML", buf.String())
 }
 
