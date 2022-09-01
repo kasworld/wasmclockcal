@@ -1,4 +1,4 @@
-// Copyright 2015,2016,2017,2018,2019,2020,2021 SeukWon Kang (kasworld@gmail.com)
+// Copyright 2015,2016,2017,2018,2019,2020,2021,2022 SeukWon Kang (kasworld@gmail.com)
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -12,8 +12,11 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -31,7 +34,9 @@ var done chan struct{}
 
 var bgExist bool
 
-var lasttime time.Time
+var g_lastClockTime time.Time
+var g_lastWeaterTime time.Time
+var g_weatherStrs []string
 
 func main() {
 	starttime = time.Now()
@@ -78,10 +83,10 @@ func displayFrame() {
 		js.Global().Get("location").Call("reload")
 	}
 
-	if lasttime.Second() == thistime.Second() {
+	if g_lastClockTime.Second() == thistime.Second() {
 		return
 	}
-	lasttime = thistime
+	g_lastClockTime = thistime
 
 	win := js.Global().Get("window")
 	winW := win.Get("innerWidth").Float()
@@ -110,7 +115,12 @@ func displayFrame() {
 	}
 	updateCalendar(calendarFontSize)
 
-	updateWeather(calendarFontSize / 2)
+	if g_lastWeaterTime.Minute() != thistime.Minute() {
+		go func() {
+			g_weatherStrs = getWeatherData()
+		}()
+	}
+	updateWeather(calendarFontSize/2, g_weatherStrs)
 
 	updateDebugInfo(calendarFontSize / 2)
 }
@@ -143,11 +153,13 @@ func updateDebugInfo(fontSize float64) {
 	jsObj.Set("innerHTML", buf.String())
 }
 
-func updateWeather(fontSize float64) {
+func updateWeather(fontSize float64, weatherStrs []string) {
 	jsObj := js.Global().Get("document").Call("getElementById", "weather")
 	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
-	fmt.Fprintf(&buf, "%s", " ")
+	for _, s := range weatherStrs {
+		fmt.Fprintf(&buf, "%s</br>", s)
+	}
 	jsObj.Set("innerHTML", buf.String())
 }
 
@@ -216,4 +228,37 @@ func updateCalendar(fontSize float64) {
 	}
 	fmt.Fprintf(&buf, "</table>")
 	jsObj.Set("innerHTML", buf.String())
+}
+
+func getWeatherData() []string {
+	resp, err := http.Get("weather.txt")
+	if err != nil {
+		jslog.Errorf("fail to httpget weather.txt %v", err)
+		return []string{err.Error()}
+	}
+	defer resp.Body.Close()
+	rtn := make([]string, 0)
+	rtn, err = LoadLineList(resp.Body)
+	if err != nil {
+		jslog.Errorf("fail to LoadLineList %v", err)
+		return []string{err.Error()}
+	}
+	return rtn
+}
+
+func LoadLineList(fd io.Reader) ([]string, error) {
+	rtn := make([]string, 0)
+	rd := bufio.NewReader(fd)
+	for {
+		line, err := rd.ReadString('\n')
+		name := strings.TrimSpace(line)
+		if len(name) == 0 {
+		} else {
+			rtn = append(rtn, name)
+		}
+		if err != nil {
+			break
+		}
+	}
+	return rtn, nil
 }
