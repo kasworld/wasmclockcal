@@ -120,7 +120,7 @@ func displayFrame() {
 			g_weatherStrs = getWeatherData()
 		}()
 	}
-	updateWeather(calendarFontSize/2, g_weatherStrs)
+	updateWeather(calendarFontSize*0.8, g_weatherStrs)
 
 	updateDebugInfo(calendarFontSize / 2)
 }
@@ -154,6 +154,12 @@ func updateDebugInfo(fontSize float64) {
 }
 
 func updateWeather(fontSize float64, weatherStrs []string) {
+	if len(weatherStrs) > 1 {
+		ss := weatherStrs[len(weatherStrs)-1]
+		ss = strings.Split(ss, ".")[0]
+		weatherStrs[len(weatherStrs)-1] = ss
+	}
+
 	jsObj := js.Global().Get("document").Call("getElementById", "weather")
 	jsObj.Get("style").Set("font-size", fmt.Sprintf("%.1fpx", fontSize))
 	var buf bytes.Buffer
